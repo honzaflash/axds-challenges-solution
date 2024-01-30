@@ -1,3 +1,6 @@
+import csv
+
+
 def run():
 
     # Mapping column names to the input data.
@@ -22,7 +25,7 @@ def run():
     with open('data.csv') as csvdata:
         csv_reader = csv.reader(csvdata)
         for row in csv_reader:
-            data.append(row)
+            data.append(row[1:]) # discard the time value/column
 
     # Turn all of the data into numerical values
     # so we can take the average of each column
@@ -40,11 +43,20 @@ def run():
     column_5 = []
     column_6 = []
     for row in numeric_data:
-        column_2.append(row[2])
-        column_3.append(row[3])
-        column_4.append(row[4])
-        column_5.append(row[5])
-        column_6.append(row[6])
+        column_2.append(row[0])
+        column_3.append(row[1])
+        column_4.append(row[2])
+        column_5.append(row[3])
+        column_6.append(row[4])
+    
+    def is_not_nan(x):
+        return not math.isnan(x)
+
+    column_2 = list(filter(is_not_nan, column_2))
+    column_3 = list(filter(is_not_nan, column_3))
+    column_4 = list(filter(is_not_nan, column_4))
+    column_5 = list(filter(is_not_nan, column_5))
+    column_6 = list(filter(is_not_nan, column_6))
 
     # Calculate the average of each column
     col_2_avg = sum(column_2) / len(column_2)
