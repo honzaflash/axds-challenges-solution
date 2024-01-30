@@ -1,11 +1,12 @@
-import csv
+import numpy as np
+# import pandas as pd
 import math
 
 
 def run():
 
     DATA_PATH = 'data.csv'
-
+    
     # Mapping column names to the input data.
     #  * Column 1 - time
     #  * Column 2 - humidity
@@ -25,29 +26,20 @@ def run():
 
     SKIP_COLS = 1 # skip this many first columns
 
-    # Load columns from a local CSV file into a list
-    data = [[] for _ in range(len(COLUMN_NAMES) - SKIP_COLS)]
-    with open(DATA_PATH) as csvdata:
-        csv_reader = csv.reader(csvdata)
-        for row in csv_reader:
-            for col_i in range(len(data)):
-                # parse the numerical values
-                data[col_i].append(float(row[col_i + SKIP_COLS]))
-
-    def is_not_nan(x):
-        return not math.isnan(x)
-
-    # get rid of NaNs
-    data_without_nans = map(
-        lambda column: list(filter(is_not_nan, column)),
-        data
-    )
-
+    start = time.perf_counter()
+    # Load data from a local CSV file into an narray
+    data = np.loadtxt(DATA_PATH, delimiter=',', usecols=tuple(range(SKIP_COLS, len(COLUMN_NAMES))))
+    loaded = time.perf_counter()
+    # Mask the `nan` values
+    without_nans = np.ma.masked_array(data, np.isnan(data))
+    masked = time.perf_counter()
     # Calculate the average of each column
-    averages = list(
-        map(lambda col: sum(col) / len(col), data_without_nans)
-    )
+    averages = np.average(without_nans, axis=0)
+    averaged = time.perf_counter()
 
+    print(f"reading into an array: {(loaded - start) * 1000} ms")
+    print(f"creating a mask: {(masked - loaded) * 1000} ms")
+    print(f"averaging the array: {(averaged - masked) * 1000} ms")
     # Return the averages of each column
     return dict(zip(COLUMN_NAMES[1:], averages))
 
