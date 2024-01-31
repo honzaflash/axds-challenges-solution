@@ -1,3 +1,13 @@
+# About the solutions
+- The debugging part took me about 1.5 hours
+- Working on the Data Table
+  - populating the table with a `useEffect` solved in few minutes
+  - about 30 mins figure out and put in place a MUI DataGrid with built-in styles, sorting, and pagination
+  - because solving those subtasks with one third party component isn't that interesting
+    I spent 1 hour to reimplement the DataGrid myself and
+    got 90% of the way there in terms of the required features
+    (column sorting has no indication of being active and there is no asc/desc option)
+
 # Axiom Data Science - Mini Challenges - React Data Table
 
 Welcome and thank you for continuing the Axiom interview process!

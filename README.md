@@ -1,5 +1,7 @@
 I didn't have the rights to create a fork so I just cloned the repo, cleared the `.git`, and initialized a new one.
 
+I have **added some commentary into the README of each challenge** expplaining the timeframe of my solutions.
+
 # Axiom Data Science - Mini Challenges
 
 This repository is the home of the Axiom Data Science (`axds`) mini challenges. We use this repository in our interview process for both take-home challenges and to talk through code during technical interviews.

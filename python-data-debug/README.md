@@ -1,3 +1,14 @@
+# About the solution
+I apologize because I probably didn't solve the challenge as intended in regards to time
+- it took me about 45min to fix the bugs
+- then the next day I spent a little over an hour on refactoring and optimizing the code
+  with the tools I was most comfortable with - maps and filters
+- You *may want to disregard the following work* since it was way past the time limit
+- knowing that NumPy arrays are more efficent I took some time to refresh and expand my basic knowledge of it
+  - while studying the docs I created a separate `run-with-nmpy.py` (this probably took me about about 2 hours)
+- then I got carried away and spent about 3 hours (heh) adding command line arg parsing and making the functions more generic
+- *I had fun (re)learning these python libraries* and did it mostly just for myself. Since I had the code however, I went ahead and submitted it as well.
+
 # Axiom Data Science - Mini Challenges - Python Data Debugging
 
 Welcome and thank you for continuing the Axiom interview process!
