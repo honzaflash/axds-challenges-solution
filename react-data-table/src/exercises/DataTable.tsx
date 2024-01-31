@@ -1,12 +1,11 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { ParseResult } from 'papaparse';
 import { usePapaParse } from 'react-papaparse';
 import { Grid, Typography, Paper } from "@mui/material";
-import Table from "./Table";
-import { GridColDef } from "@mui/x-data-grid";
+import DataGrid, { GridColDef } from "./DataGrid";
 
 const COLUMN_CONFIG: GridColDef[] = [
-  { field: 'time', headerName: 'Time', width: 200 },
+  { field: 'time', headerName: 'Time', sortFunc: (a, b) => new Date(a).valueOf() - new Date(b).valueOf() },
   { field: 'humidity', headerName: 'Humidity' },
   { field: 'salinity', headerName: 'Salinity' },
   { field: 'air_temperature', headerName: 'Air temperature' },
@@ -18,7 +17,7 @@ interface DataTableProps {}
 
 const DataTable: React.FC<DataTableProps> = () => {
 
-  const [csvData, setCsvData] = useState <Record<string, string>[]>([]);
+  const [csvData, setCsvData] = useState<Record<string, string>[]>([]);
 
   const { readRemoteFile } = usePapaParse();
 
@@ -73,7 +72,9 @@ const DataTable: React.FC<DataTableProps> = () => {
           if you would like.
         </Typography>
 
-        <Table rawData={csvData} columnConfig={COLUMN_CONFIG}/>
+        <Typography paragraph component="div">
+          <DataGrid rawData={csvData} columnConfig={COLUMN_CONFIG} />
+        </Typography>
 
       </Paper>
     </Grid>
