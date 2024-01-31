@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import { ParseResult } from 'papaparse';
 import { usePapaParse } from 'react-papaparse';
 import { Grid, Typography, Paper } from "@mui/material";
@@ -11,7 +11,8 @@ const DataTable: React.FC<DataTableProps> = () => {
 
   const { readRemoteFile } = usePapaParse();
 
-  const loadData = () => {
+  // Load data on component mount
+  useEffect(() => {
     readRemoteFile(window.location.href + '/data.csv', {
       worker: true,
       header: true,
@@ -21,7 +22,7 @@ const DataTable: React.FC<DataTableProps> = () => {
         console.log("CSV Data Loaded!")
       }
     });
-  };
+  }, [readRemoteFile, setCsvData]);
 
   return (
     <Grid container direction="column">
@@ -61,9 +62,6 @@ const DataTable: React.FC<DataTableProps> = () => {
           if you would like.
         </Typography>
 
-        <Typography paragraph component="div">
-          <button onClick={() => loadData()}>Load CSV Data</button>
-        </Typography>
 
         <Typography paragraph component="div">
           <table className="ArchiveTable">
