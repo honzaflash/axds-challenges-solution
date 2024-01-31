@@ -7,7 +7,7 @@ import { useRef } from "react";
 /// Code in this block (ended by the similar comment several lines below),
 /// are relevant to the exercise. You can ignore all other code
 
-interface AppProps {}
+interface TodoListAppProps {}
 
 interface TodoInterface {
   id: number;
@@ -15,21 +15,46 @@ interface TodoInterface {
   isComplete?: boolean;
 }
 
-const App: React.FC<AppProps> = () => {
-  const defaults = [
-    {
-      id: 0,
-      body: "I am the body of a default todo.",
-    },
-    {
-      id: 1,
-      body: "I am the body of a complete todo",
-      isComplete: true,
-    },
-  ];
-  const counter = useRef(defaults.length);
-  const [todos, setTodos] = useState<TodoInterface[]>(defaults);
+const INITIAL_TODOS = [
+  {
+    id: 0,
+    body: "I am the body of a default todo.",
+  },
+  {
+    id: 1,
+    body: "I am the body of a complete todo",
+    isComplete: true,
+  },
+];
+
+// TODO (...a todo haha) more decomposition would be nice - a separate todo item component
+const TodoListApp: React.FC<TodoListAppProps> = () => {
+  const counter = useRef(INITIAL_TODOS.length);
+  const [todos, setTodos] = useState<TodoInterface[]>(INITIAL_TODOS);
   const [input, setInput] = useState("");
+
+  const submitNewTodo = () => {
+    const newTodo = {
+      id: counter.current,
+      body: input,
+    };
+    counter.current += 1;
+    setTodos((prev) => [...prev, newTodo]);
+  };
+
+  const toggleTodoComplete = (id: number) => {
+    setTodos((prev) => {
+      const index = prev.findIndex((todo) => todo.id === id);
+      // update the nested property without mutatiting the original state
+      const newState = [...prev];
+      newState.splice(index, 1, {...(prev[index]), isComplete: !prev[index].isComplete});
+      return newState;
+    });
+  };
+
+  const deleteTodo = (id: number) => {
+    setTodos((prev) => prev.filter((todo) => id !== todo.id));
+  };
 
   return (
     <div
@@ -38,15 +63,16 @@ const App: React.FC<AppProps> = () => {
       <div
         style={{ display: "flex", justifyContent: "center", marginBottom: 50 }}
       >
-        <input type="text" placeholder="Add a todo!" value={input} />
-        <button
-          onClick={() => {
-            setTodos((prev) => [...prev, { body: input, id: counter.current }]);
-            setInput("");
-          }}
-        >
-          Submit Todo
-        </button>
+        <form onSubmit={(e) => {
+              submitNewTodo();
+              setInput("");
+              e.preventDefault()
+            }}>
+          <input type="text" placeholder="Add a todo!" value={input} onChange={(e) => setInput(e.target.value)} />
+          <button type="submit">
+            Submit Todo
+          </button>
+        </form>
       </div>
       {todos.map((todo) => (
         <div
@@ -60,6 +86,7 @@ const App: React.FC<AppProps> = () => {
             backgroundColor: todo.isComplete ? "green" : "initial",
             color: todo.isComplete ? "white" : "initial",
           }}
+          key={todo.id}
         >
           <p style={{ textOverflow: "wrap", maxWidth: "75%" }}>{todo.body}</p>
           <div style={{ display: "flex", flexDirection: "column" }}>
@@ -73,16 +100,12 @@ const App: React.FC<AppProps> = () => {
               <input
                 id={`${todo.body}-checkbox`}
                 type="checkbox"
-                checked={todo.isComplete}
-                onClick={() => {
-                  todo.isComplete = true;
-                }}
+                checked={Boolean(todo.isComplete)}
+                onChange={() => toggleTodoComplete(todo.id)}
               />
             </div>
             <button
-              onClick={() => {
-                setTodos(todos.filter(({ id }) => id === todo.id));
-              }}
+              onClick={() => deleteTodo(todo.id)}
             >
               Delete
             </button>
@@ -132,7 +155,7 @@ const Todo: React.FC<TodoProps> = () => {
         </Typography>
 
       </Paper>
-      <App />
+      <TodoListApp />
     </Grid>
   );
 };
