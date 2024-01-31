@@ -2,6 +2,17 @@ import React, {useEffect, useState} from "react";
 import { ParseResult } from 'papaparse';
 import { usePapaParse } from 'react-papaparse';
 import { Grid, Typography, Paper } from "@mui/material";
+import Table from "./Table";
+import { GridColDef } from "@mui/x-data-grid";
+
+const COLUMN_CONFIG: GridColDef[] = [
+  { field: 'time', headerName: 'Time', width: 200 },
+  { field: 'humidity', headerName: 'Humidity' },
+  { field: 'salinity', headerName: 'Salinity' },
+  { field: 'air_temperature', headerName: 'Air temperature' },
+  { field: 'water_temperature', headerName: 'Water temperature' },
+  { field: 'wind_speed', headerName: 'Wind speed' },
+]
 
 interface DataTableProps {}
 
@@ -62,34 +73,7 @@ const DataTable: React.FC<DataTableProps> = () => {
           if you would like.
         </Typography>
 
-
-        <Typography paragraph component="div">
-          <table className="ArchiveTable">
-            <thead>
-              <tr>
-                <th>time</th>
-                <th>humidity</th>
-                <th>salinity</th>
-                <th>air_temperature</th>
-                <th>water_temperature</th>
-                <th>wind_speed</th>
-              </tr>
-            </thead>
-            <tbody>
-              {csvData &&
-                csvData.map((data, index) => (
-                  <tr key={index}>
-                    <td>{data.time}</td>
-                    <td>{data.humidity}</td>
-                    <td>{data.salinity}</td>
-                    <td>{data.air_temperature}</td>
-                    <td>{data.water_temperature}</td>
-                    <td>{data.wind_speed}</td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-        </Typography>
+        <Table rawData={csvData} columnConfig={COLUMN_CONFIG}/>
 
       </Paper>
     </Grid>
